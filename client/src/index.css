@@ -1,0 +1,8 @@
+* {
+    -webkit-tap-highlight-color: transparent;
+}
+
+#root {
+    min-height: 100vh;
+    background: #edf3f8;
+}

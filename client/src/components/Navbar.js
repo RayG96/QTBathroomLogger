@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import React from 'react';
 import {
     Box,
     Flex,
@@ -11,12 +11,13 @@ import {
     MenuList,
     MenuItem,
     MenuDivider,
-    useDisclosure,
     useColorModeValue,
     Stack,
     Center,
+    useDisclosure,
 } from '@chakra-ui/react';
 import logo from '../images/QT Logo 2021.png';
+import SignOutModal from './SignOutModal';
 
 export default function Nav() {
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -38,8 +39,8 @@ export default function Nav() {
                             marginLeft={'15px'}
                         />
                     </Box>
-                    <Button colorScheme='orange' width='50%' size='lg'>Sign Out</Button>
-                    {/* <Button colorScheme='green' size='lg'>Sign In</Button> */}
+                    <Button onClick={onOpen} colorScheme='orange' width='50%' size='lg'>Sign Out</Button>
+                    <SignOutModal isOpen={isOpen} onClose={onClose}/>
                     <Flex alignItems={'center'}>
                         <Stack direction={'row'} spacing={7}>
 
