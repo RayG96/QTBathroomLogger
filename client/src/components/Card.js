@@ -7,8 +7,6 @@ import { FaToilet } from 'react-icons/fa'
 export default function Card() {
     return (
         <Flex
-            bg="#edf3f8"
-            _dark={{ bg: "#3e3e3e" }}
             p={50}
             paddingBottom={2}
             w="full"

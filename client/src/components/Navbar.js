@@ -3,7 +3,6 @@ import {
     Box,
     Flex,
     Avatar,
-    Link,
     Image,
     Button,
     Menu,
@@ -18,6 +17,7 @@ import {
 } from '@chakra-ui/react';
 import logo from '../images/QT Logo 2021.png';
 import SignOutModal from './SignOutModal';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 export default function Nav() {
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -70,7 +70,7 @@ export default function Nav() {
                                     </Center>
                                     <br />
                                     <MenuDivider />
-                                    <MenuItem>Rosters</MenuItem>
+                                    <MenuItem as={Link} to={'/rosters'}>Rosters</MenuItem>
                                     <MenuItem>Logout</MenuItem>
                                 </MenuList>
                             </Menu>
