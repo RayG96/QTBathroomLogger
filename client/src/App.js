@@ -5,9 +5,23 @@ import Navbar from './components/Navbar';
 import NotFoundPage from 'pages/NotFoundPage';
 import HomePage from 'pages/HomePage';
 import RostersPage from 'pages/RostersPage';
+import { AuthContext } from 'context/auth';
+import FailedLoginPage from 'pages/FailedLoginPage';
 
 function App() {
-    return (
+    const { user } = useContext(AuthContext);
+    return user === null ? null : user === 'NoUser' ? (
+        <ChakraProvider>
+            <Router>
+                <Navbar />
+                <Routes>
+                    <Route path='/' element={<HomePage />} />
+                    <Route path='/failedLogin' element={<FailedLoginPage />} />
+                    <Route path='*' element={<Navigate replace to='/' />} />
+                </Routes>
+            </Router>
+        </ChakraProvider>
+    ) : (
         <ChakraProvider theme={theme}>
             <Router>
                 <Navbar />

@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { AuthContext } from 'context/auth';
 import {
     Box,
     Flex,
@@ -21,6 +22,8 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 export default function Nav() {
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const { user } = useContext(AuthContext);
+    console.log(user)
     return (
         <>
             <Box position={'sticky'} zIndex={999} top={0} w={'100%'} className='navbar' bg={useColorModeValue('#3e3e3e', 'gray.900')} px={4}>
@@ -39,41 +42,43 @@ export default function Nav() {
                             marginLeft={'15px'}
                         />
                     </Box>
-                    <Button onClick={onOpen} colorScheme='orange' width='50%' size='lg'>Sign Out</Button>
-                    <SignOutModal isOpen={isOpen} onClose={onClose}/>
+                    {user !== 'NoUser' && user !== null && <Button onClick={onOpen} colorScheme='orange' width='50%' size='lg'>Sign Out</Button> }
+                    <SignOutModal isOpen={isOpen} onClose={onClose} />
                     <Flex alignItems={'center'}>
                         <Stack direction={'row'} spacing={7}>
-
-                            <Menu>
-                                <MenuButton
-                                    as={Button}
-                                    rounded={'full'}
-                                    variant={'link'}
-                                    cursor={'pointer'}
-                                    minW={0}>
-                                    <Avatar
-                                        size={'md'}
-                                        src={'https://avatars.dicebear.com/api/male/username.svg'}
-                                    />
-                                </MenuButton>
-                                <MenuList alignItems={'center'}>
-                                    <br />
-                                    <Center>
+                            {user === 'NoUser' || user === null ? null : (
+                                <Menu>
+                                    <MenuButton
+                                        as={Button}
+                                        rounded={'full'}
+                                        variant={'link'}
+                                        cursor={'pointer'}
+                                        minW={0}>
                                         <Avatar
-                                            size={'xl'}
-                                            src={'https://avatars.dicebear.com/api/male/username.svg'}
+                                            showBorder={true}
+                                            size={'md'}
+                                            src={user.iconImage}
                                         />
-                                    </Center>
-                                    <br />
-                                    <Center>
-                                        <p>Ms. Singh</p>
-                                    </Center>
-                                    <br />
-                                    <MenuDivider />
-                                    <MenuItem as={Link} to={'/rosters'}>Rosters</MenuItem>
-                                    <MenuItem>Logout</MenuItem>
-                                </MenuList>
-                            </Menu>
+                                    </MenuButton>
+                                    <MenuList alignItems={'center'}>
+                                        <br />
+                                        <Center>
+                                            <Avatar
+                                                size={'xl'}
+                                                src={user.iconImage}
+                                            />
+                                        </Center>
+                                        <br />
+                                        <Center>
+                                            <p>{user.displayName}</p>
+                                        </Center>
+                                        <br />
+                                        <MenuDivider />
+                                        <MenuItem as={Link} to={'/rosters'}>Rosters</MenuItem>
+                                        <a href={`http://localhost:5000/auth/logout`}><MenuItem>Logout</MenuItem></a>
+                                    </MenuList>
+                                </Menu>
+                            )}
                         </Stack>
                     </Flex>
                 </Flex>
