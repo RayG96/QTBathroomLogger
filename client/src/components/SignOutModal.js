@@ -32,7 +32,7 @@ export default function SignOutModal(props) {
     const [isError, setIsError] = useState(false);
 
     const handleInputChange = (e) => {
-        const regex = /^[a-zA-Z\s.,-]+$/; // only allow letters, comma, period, and dash
+        const regex = /^[a-zA-Z\s.,'`-]+$/; // only allow letters, comma, single quote, backtick, period, and hyphen
         if (regex.test(e.target.value) || !e.target.value) {
             setName(e.target.value);
         }
@@ -59,7 +59,6 @@ export default function SignOutModal(props) {
                 reason: reason
             })
         }).then(response => {
-            console.log(response.statusText)
             if (response.status === 200) {
                 onClose();
             } else if (response.status === 400) {
@@ -71,7 +70,7 @@ export default function SignOutModal(props) {
             }
             return response;
         }).catch(err => {
-            console.log(err);
+            console.error(err);
             setErrorText('Network error occurred');
             setIsError(true);
         });
@@ -81,19 +80,19 @@ export default function SignOutModal(props) {
         <>
             <Modal initialFocusRef={initialRef} finalFocusRef={finalRef} size="xl" isOpen={props.isOpen} onClose={onClose}>
                 <ModalOverlay />
-                <ModalContent>
+                <ModalContent mt={4}>
                     <form onSubmit={onSubmit}>
                         <ModalHeader>Sign Out</ModalHeader>
                         <ModalCloseButton />
-                        <ModalBody pb={6}>
+                        <ModalBody pb={2}>
                             <FormControl isRequired>
                                 <FormLabel>Name</FormLabel>
                                 <Input onChange={handleInputChange} value={name} ref={initialRef} autoComplete='off' placeholder='Name' />
                             </FormControl>
 
-                            <FormControl mt={4}>
+                            <FormControl mt={2}>
                                 <FormLabel>Reason</FormLabel>
-                                <ButtonGroup size='lg' display='flex' justifyContent='center' variant='outline' spacing='4'>
+                                <ButtonGroup size={['sm', 'lg']} display='flex' justifyContent='center' variant='outline' spacing={['1', '4']}>
                                     <Button onClick={() => setReason('bathroom')} leftIcon={<FaToilet />} border='2px' colorScheme={reason === 'bathroom' ? 'orange' : 'gray'}>Bathroom</Button>
                                     <Button onClick={() => setReason('water')} leftIcon={<IoIosWater />} border='2px' colorScheme={reason === 'water' ? 'orange' : 'gray'}>Water</Button>
                                     <Button onClick={() => setReason('nurse')} leftIcon={<MdLocalHospital />} border='2px' colorScheme={reason === 'nurse' ? 'orange' : 'gray'}>Nurse</Button>

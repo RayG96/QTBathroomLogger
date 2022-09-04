@@ -6,7 +6,6 @@ const initialState = {
 
 const AuthContext = createContext({
     user: null,
-    // @ts-ignore
     login: (userData) => {},
     logout: () => {},
     refreshUserData: () => {},

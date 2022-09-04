@@ -6,31 +6,50 @@ import NotFoundPage from 'pages/NotFoundPage';
 import HomePage from 'pages/HomePage';
 import RostersPage from 'pages/RostersPage';
 import { AuthContext } from 'context/auth';
+import { SocketContext, socket } from 'context/socket';
 import FailedLoginPage from 'pages/FailedLoginPage';
+import NotAuthorized from 'pages/NotAuthorized';
 
 function App() {
     const { user } = useContext(AuthContext);
+    
     return user === null ? null : user === 'NoUser' ? (
         <ChakraProvider>
-            <Router>
-                <Navbar />
-                <Routes>
-                    <Route path='/' element={<HomePage />} />
-                    <Route path='/failedLogin' element={<FailedLoginPage />} />
-                    <Route path='*' element={<Navigate replace to='/' />} />
-                </Routes>
-            </Router>
+            <SocketContext.Provider value={socket}>
+                <Router>
+                    <Navbar />
+                    <Routes>
+                        <Route path='/' element={<HomePage />} />
+                        <Route path='/failedLogin' element={<FailedLoginPage />} />
+                        <Route path='*' element={<Navigate replace to='/' />} />
+                    </Routes>
+                </Router>
+            </SocketContext.Provider>
         </ChakraProvider>
-    ) : (
+    ) : user.admin === true ? (
         <ChakraProvider theme={theme}>
-            <Router>
-                <Navbar />
-                <Routes>
-                    <Route path='/' element={<HomePage />} />
-                    <Route path='/rosters' element={<RostersPage />} />
-                    <Route path='*' element={<NotFoundPage />} />
-                </Routes>
-            </Router>
+            <SocketContext.Provider value={socket}>
+                <Router>
+                    <Navbar />
+                    <Routes>
+                        <Route path='/' element={<HomePage />} />
+                        <Route path='/rosters' element={<RostersPage />} />
+                        <Route path='*' element={<NotFoundPage />} />
+                    </Routes>
+                </Router>
+            </SocketContext.Provider>
+        </ChakraProvider>
+    ) : ( 
+        <ChakraProvider>
+            <SocketContext.Provider value={socket}>
+                <Router>
+                    <Navbar />
+                    <Routes>
+                        <Route path='/' element={<NotAuthorized />} />
+                        <Route path='*' element={<Navigate replace to='/' />} />
+                    </Routes>
+                </Router>
+            </SocketContext.Provider>
         </ChakraProvider>
     );
 }

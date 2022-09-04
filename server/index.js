@@ -10,7 +10,14 @@ const mongoose = require('mongoose');
 const MongoStore = require('connect-mongo');
 const app = express();
 const { Schema } = mongoose;
+const socketIo = require('socket.io')
+const server = require('http').createServer(app)
 
+const io = socketIo(server, {
+    cors: {
+        origin: 'http://localhost:3000'
+    }
+}) //in case server and client run on different urls
 const corsPolicy = async (req, res, next) => {
     res.header('Access-Control-Allow-Credentials', true);
     res.header('Access-Control-Allow-Origin', req.headers.origin);
@@ -48,7 +55,23 @@ app.use('/transactions', require('./src/routes/studentTransactions'));
 app.use('/getuser', (req, res) => {
     res.send(req.user);
 });
+app.set('socketio', io);
 main().catch(err => console.log(err));
+
+//Whenever someone connects this gets executed
+io.on('connection', function (socket) {
+    console.log('A user connected');
+    io.emit('currentDateTime', Date.now());
+    
+    //Whenever someone disconnects this piece of code executed
+    socket.on('disconnect', function () {
+        console.log('A user disconnected');
+    });
+});
+
+setInterval(() => {
+    io.emit('currentDateTime', Date.now());
+}, 1000);
 
 async function main() {
 
@@ -69,40 +92,10 @@ async function main() {
         useNewUrlParser: true,
     }).then(() => {
         console.log('MongoDB connection successful')
-        return app.listen({ port: process.env.PORT });
+        return server.listen({ port: process.env.PORT });
     }).then((res) => {
         console.log(`Server running at http://localhost:${process.env.PORT}`);
     }).catch(err => {
         console.error(err)
     })
-
-    // let model = new bathroomLogModel({
-    //     teacherGoogleId: '01561651685465',
-    //     studentName: 'John Doe',
-    //     date: Date.now(),
-    //     timeOut: Date.now(),
-    //     timeIn: null
-    // })
-    // // Create a bathroom log and insert into database
-    // // const article = await bathroomLog.create({
-    // //   teacherGoogleId: '01561651685465',
-    // //   studentName: 'John Doe',
-    // //   date: Date.now(),
-    // //   timeOut: Date.now(),
-    // //   timeIn: null
-    // // });
-
-    // // let log = await bathroomLog.findOneAndUpdate({_id: "630fb9a4aa6180db7cc3d76b" }, {timeIn: Date.now()}, {
-    // //   new: true
-    // // });
-
-    // model.save()
-    //     .then(doc => {
-    //         console.log(doc);
-    //     })
-    //     .catch(err => {
-    //         console.error(err);
-    //     })
-    // let log = await bathroomLogModel.find({ timeIn: null })
-    // console.log(log);
 }
