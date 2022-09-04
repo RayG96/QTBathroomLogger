@@ -19,6 +19,7 @@ import {
 import logo from '../images/QT Logo 2021.png';
 import SignOutModal from './SignOutModal';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { config } from 'util/constants';
 
 export default function Nav() {
     const { isOpen, onOpen, onClose } = useDisclosure();
@@ -42,11 +43,11 @@ export default function Nav() {
                             marginLeft={'15px'}
                         />
                     </Box>
-                    {user !== 'NoUser' && user !== null && <Button onClick={onOpen} colorScheme='orange' width='50%' size='lg'>Sign Out</Button> }
-                    <SignOutModal isOpen={isOpen} onClose={onClose} />
+                    {user !== 'NoUser' && <Button onClick={onOpen} colorScheme='orange' width='50%' size='lg'>Sign Out</Button> }
+                    <SignOutModal isOpen={isOpen} onClose={onClose} user={user} />
                     <Flex alignItems={'center'}>
                         <Stack direction={'row'} spacing={7}>
-                            {user === 'NoUser' || user === null ? null : (
+                            {user === 'NoUser' ? null : (
                                 <Menu>
                                     <MenuButton
                                         as={Button}
@@ -75,7 +76,7 @@ export default function Nav() {
                                         <br />
                                         <MenuDivider />
                                         <MenuItem as={Link} to={'/rosters'}>Rosters</MenuItem>
-                                        <a href={`http://localhost:5000/auth/logout`}><MenuItem>Logout</MenuItem></a>
+                                        <a href={`${config.API_URL}/auth/logout`}><MenuItem>Logout</MenuItem></a>
                                     </MenuList>
                                 </Menu>
                             )}

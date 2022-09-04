@@ -2,6 +2,7 @@ require('dotenv').config()
 require('./src/auth/passportAuth');
 const express = require('express');
 const cors = require('cors');
+var bodyParser = require('body-parser');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const passport = require('passport');
@@ -9,7 +10,6 @@ const mongoose = require('mongoose');
 const MongoStore = require('connect-mongo');
 const app = express();
 const { Schema } = mongoose;
-const bathroomLogModel = require('./src/models/BathroomLog')
 
 const corsPolicy = async (req, res, next) => {
     res.header('Access-Control-Allow-Credentials', true);
@@ -42,13 +42,12 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(express.static('../client/public'));
 
 app.use('/auth', require('./src/routes/auth'));
+app.use('/transactions', require('./src/routes/studentTransactions'));
 app.use('/getuser', (req, res) => {
     res.send(req.user);
 });
-
 main().catch(err => console.log(err));
 
 async function main() {
@@ -59,6 +58,8 @@ async function main() {
             response.sendFile(path.join(__dirname, '../client/build', 'index.html'));
         });
     } else {
+
+        app.use(express.static('../client/public'));
         app.get('/', (req, res) => {
             res.send('Hello World!');
         });

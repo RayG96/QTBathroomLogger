@@ -11,48 +11,106 @@ import {
     FormControl,
     FormLabel,
     Input,
-    useDisclosure,
     ButtonGroup,
-    useBreakpointValue,
+    FormHelperText,
+    FormErrorMessage,
 } from '@chakra-ui/react';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { FaToilet, FaQuestion } from 'react-icons/fa';
 import { IoIosWater } from 'react-icons/io';
 import { MdLocalHospital } from 'react-icons/md';
+import { config } from 'util/constants';
 
 export default function SignOutModal(props) {
+    const initialRef = React.useRef(null);
+    const finalRef = React.useRef(null);
 
-    const initialRef = React.useRef(null)
-    const finalRef = React.useRef(null)
+    const [name, setName] = useState('');
+    const [reason, setReason] = useState('bathroom');
+
+    const [errorText, setErrorText] = useState('');
+    const [isError, setIsError] = useState(false);
+
+    const handleInputChange = (e) => {
+        const regex = /^[a-zA-Z\s.,-]+$/; // only allow letters, comma, period, and dash
+        if (regex.test(e.target.value) || !e.target.value) {
+            setName(e.target.value);
+        }
+    }
+
+    const onClose = () => {
+        props.onClose();
+        setName('');
+        setErrorText('');
+        setIsError(false);
+        setReason('bathroom')
+    }
+
+    const onSubmit = (e) => {
+        e.preventDefault();
+
+        fetch(`${config.API_URL}/transactions/sign-out`, {
+            method: 'POST',
+            // We convert the React state to JSON and send it as the POST body
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                teacherId: props.user.googleId,
+                name: name,
+                reason: reason
+            })
+        }).then(response => {
+            console.log(response.statusText)
+            if (response.status === 200) {
+                onClose();
+            } else if (response.status === 400) {
+                setErrorText(response.statusText);
+                setIsError(true);
+            } else {
+                setErrorText('Error occurred');
+                setIsError(true);
+            }
+            return response;
+        }).catch(err => {
+            console.log(err);
+            setErrorText('Network error occurred');
+            setIsError(true);
+        });
+    };
 
     return (
         <>
-            <Modal initialFocusRef={initialRef} finalFocusRef={finalRef} size="xl" isOpen={props.isOpen} onClose={props.onClose}>
+            <Modal initialFocusRef={initialRef} finalFocusRef={finalRef} size="xl" isOpen={props.isOpen} onClose={onClose}>
                 <ModalOverlay />
                 <ModalContent>
-                    <ModalHeader>Sign Out</ModalHeader>
-                    <ModalCloseButton />
-                    <ModalBody pb={6}>
-                        <FormControl>
-                            <FormLabel>Name</FormLabel>
-                            <Input ref={initialRef} placeholder='Name' />
-                        </FormControl>
-                        <FormControl mt={4}>
-                            <FormLabel>Reason</FormLabel>
-                            <ButtonGroup display='flex' justifyContent='center' variant='outline' spacing='4'>
-                                <Button leftIcon={<FaToilet />} border='2px' colorScheme='yellow'>Bathroom</Button>
-                                <Button leftIcon={<IoIosWater />} border='2px'>Water</Button>
-                                <Button leftIcon={<MdLocalHospital />} border='2px'>Nurse</Button>
-                                <Button leftIcon={<FaQuestion />} border='2px'>Other</Button>
-                            </ButtonGroup>
-                        </FormControl>
-                    </ModalBody>
+                    <form onSubmit={onSubmit}>
+                        <ModalHeader>Sign Out</ModalHeader>
+                        <ModalCloseButton />
+                        <ModalBody pb={6}>
+                            <FormControl isRequired>
+                                <FormLabel>Name</FormLabel>
+                                <Input onChange={handleInputChange} value={name} ref={initialRef} autoComplete='off' placeholder='Name' />
+                            </FormControl>
 
-                    <ModalFooter>
-                        <Button width='25%' colorScheme='blue' mr={3}>
-                            Sign Out
-                        </Button>
-                    </ModalFooter>
+                            <FormControl mt={4}>
+                                <FormLabel>Reason</FormLabel>
+                                <ButtonGroup size='lg' display='flex' justifyContent='center' variant='outline' spacing='4'>
+                                    <Button onClick={() => setReason('bathroom')} leftIcon={<FaToilet />} border='2px' colorScheme={reason === 'bathroom' ? 'orange' : 'gray'}>Bathroom</Button>
+                                    <Button onClick={() => setReason('water')} leftIcon={<IoIosWater />} border='2px' colorScheme={reason === 'water' ? 'orange' : 'gray'}>Water</Button>
+                                    <Button onClick={() => setReason('nurse')} leftIcon={<MdLocalHospital />} border='2px' colorScheme={reason === 'nurse' ? 'orange' : 'gray'}>Nurse</Button>
+                                    <Button onClick={() => setReason('other')} leftIcon={<FaQuestion />} border='2px' colorScheme={reason === 'other' ? 'orange' : 'gray'}>Other</Button>
+                                </ButtonGroup>
+                            </FormControl>
+                        </ModalBody>
+
+                        <ModalFooter>
+                            <FormControl isInvalid={isError}>
+                                <FormErrorMessage>{errorText}</FormErrorMessage>
+                            </FormControl>
+                            <Button type='submit' width='25%' colorScheme='blue' mr={3}>
+                                Sign Out
+                            </Button>
+                        </ModalFooter>
+                    </form>
                 </ModalContent>
             </Modal>
 

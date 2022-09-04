@@ -10,6 +10,10 @@ const bathroomLogSchema = new Schema(
             type: String,
             required: true
         },
+        signOutReason: {
+            type: String,
+            required: true
+        },
         date: {
             type: Date,
             required: true
