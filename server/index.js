@@ -65,15 +65,14 @@ app.use('/getuser', (req, res) => {
     console.log(req.user);
     res.send(req.user);
 });
+app.get('/health', (req, res) => {
+    res.status(200).send('Ok');
+});
+
 app.set('socketio', io);
+
 main().catch(err => console.log(err));
 
-app.get('/auth/google/callback',
-  passport.authenticate('google', { failureRedirect: '/login' }), (req, res) => {
-    // res.send(req.user)
-    console.log("Google Login Success! " + req.user);
-    res.redirect('/');
-  });
 //Whenever someone connects this gets executed
 io.on('connection', (socket) => {
     console.log('A user connected');
@@ -99,7 +98,7 @@ async function main() {
         app.use(express.static('../client/public'));
         app.get('*', (req, res) => {
             res.sendFile(path.join('../client/public', 'index.html'));
-         });
+        });
         // app.get('/', (req, res) => {
         //     res.send('Hello World!');
         // });
