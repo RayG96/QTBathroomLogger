@@ -5,7 +5,6 @@
     "license": "MIT",
     "scripts": {
         "start": "cd server/ && npm run start",
-        "build": "cd server/ && npm run build && cd ../client/ && npm run build",
         "preinstall": "cd server/ && npm install && cd ../client/ && npm install",
         "dev": "run-p dev-server dev-client",
         "dev-server": "cd server && npm run start",

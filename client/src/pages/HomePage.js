@@ -25,7 +25,7 @@ export default function HomePage() {
 
         // client-side
         socket.on('connect', () => {
-            console.log(socket.id);
+            // console.log(socket.id);
         });
         socket.on('currentDateTime', (body) => {
             setCurrentTime(body);

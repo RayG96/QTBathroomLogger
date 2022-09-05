@@ -1,5 +1,5 @@
 const prod = {
-    API_URL: '',
+    API_URL: 'https://patient-pine-9259.fly.dev',
 };
 const dev = {
     API_URL: 'http://localhost:5000',

@@ -2,20 +2,19 @@ require('dotenv').config()
 require('./src/auth/passportAuth');
 const express = require('express');
 const cors = require('cors');
-var bodyParser = require('body-parser');
+const path = require('path');
 const session = require('express-session');
 const cookieParser = require('cookie-parser');
 const passport = require('passport');
 const mongoose = require('mongoose');
 const MongoStore = require('connect-mongo');
 const app = express();
-const { Schema } = mongoose;
 const socketIo = require('socket.io')
 const server = require('http').createServer(app)
 
 const io = socketIo(server, {
     cors: {
-        origin: 'http://localhost:3000'
+        origin: process.env.CLIENT_URL
     }
 }) //in case server and client run on different urls
 const corsPolicy = async (req, res, next) => {
@@ -28,6 +27,16 @@ const corsPolicy = async (req, res, next) => {
 
 app.options('*', cors());
 app.use(corsPolicy);
+
+// function requireHTTPS(req, res, next) {
+//     // The 'x-forwarded-proto' check is for Heroku
+//     if (!req.secure && req.get('x-forwarded-proto') !== 'https' && process.env.NODE_ENV !== 'development') {
+//         return res.redirect('https://' + req.get('host') + req.url);
+//     }
+//     next();
+// }
+
+// app.use(requireHTTPS);
 
 app.use(
     session({
@@ -46,25 +55,32 @@ app.use(
 );
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
+app.use(cookieParser(process.env.SESSION_SECRET));
 app.use(passport.initialize());
 app.use(passport.session());
 
 app.use('/auth', require('./src/routes/auth'));
 app.use('/transactions', require('./src/routes/studentTransactions'));
 app.use('/getuser', (req, res) => {
+    console.log(req.user);
     res.send(req.user);
 });
 app.set('socketio', io);
 main().catch(err => console.log(err));
 
+app.get('/auth/google/callback',
+  passport.authenticate('google', { failureRedirect: '/login' }), (req, res) => {
+    // res.send(req.user)
+    console.log("Google Login Success! " + req.user);
+    res.redirect('/');
+  });
 //Whenever someone connects this gets executed
-io.on('connection', function (socket) {
+io.on('connection', (socket) => {
     console.log('A user connected');
     io.emit('currentDateTime', Date.now());
-    
+
     //Whenever someone disconnects this piece of code executed
-    socket.on('disconnect', function () {
+    socket.on('disconnect', () => {
         console.log('A user disconnected');
     });
 });
@@ -74,18 +90,19 @@ setInterval(() => {
 }, 1000);
 
 async function main() {
-
     if (process.env.NODE_ENV === 'production') {
         app.use(express.static('../client/build'));
         app.get('*', (request, response) => {
             response.sendFile(path.join(__dirname, '../client/build', 'index.html'));
         });
     } else {
-
         app.use(express.static('../client/public'));
-        app.get('/', (req, res) => {
-            res.send('Hello World!');
-        });
+        app.get('*', (req, res) => {
+            res.sendFile(path.join('../client/public', 'index.html'));
+         });
+        // app.get('/', (req, res) => {
+        //     res.send('Hello World!');
+        // });
     }
 
     await mongoose.connect(process.env.DATABASE_URL, {

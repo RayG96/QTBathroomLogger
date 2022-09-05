@@ -29,7 +29,7 @@ export default function Nav() {
         <>
             <Box position={'sticky'} zIndex={999} top={0} w={'100%'} className='navbar' bg={useColorModeValue('#3e3e3e', 'gray.900')} px={4}>
                 <Flex h={20} alignItems={'center'} justifyContent={'space-between'}>
-                    <Box h='75px'>
+                    <Box h='75px' as={Link} to={'/'}>
                         <Image
                             w={'46px'}
                             minW={'46px'}
@@ -43,7 +43,7 @@ export default function Nav() {
                             marginLeft={'15px'}
                         />
                     </Box>
-                    {(user !== 'NoUser' && user.admin === true) && <Button onClick={onOpen} colorScheme='orange' width='50%' size='lg'>Sign Out</Button> }
+                    {(user !== 'NoUser' && user.admin === true) && <Button onClick={onOpen} colorScheme='orange' width='50%' size='lg'>Sign Out</Button>}
                     <SignOutModal isOpen={isOpen} onClose={onClose} user={user} />
                     <Flex alignItems={'center'}>
                         <Stack direction={'row'} spacing={7}>
@@ -75,6 +75,7 @@ export default function Nav() {
                                         </Center>
                                         <br />
                                         <MenuDivider />
+                                        <MenuItem as={Link} to={'/'}>Home</MenuItem>
                                         {user.admin === true && <MenuItem as={Link} to={'/rosters'}>Rosters</MenuItem>}
                                         <a href={`${config.API_URL}/auth/logout`}><MenuItem>Logout</MenuItem></a>
                                     </MenuList>
