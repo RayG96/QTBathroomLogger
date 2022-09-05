@@ -1,5 +1,5 @@
 const prod = {
-    API_URL: 'https://patient-pine-9259.fly.dev',
+    API_URL: 'https://qt-logger.onrender.com',
 };
 const dev = {
     API_URL: 'http://localhost:5000',
