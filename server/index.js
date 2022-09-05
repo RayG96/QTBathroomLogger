@@ -28,15 +28,15 @@ const corsPolicy = async (req, res, next) => {
 app.options('*', cors());
 app.use(corsPolicy);
 
-// function requireHTTPS(req, res, next) {
-//     // The 'x-forwarded-proto' check is for Heroku
-//     if (!req.secure && req.get('x-forwarded-proto') !== 'https' && process.env.NODE_ENV !== 'development') {
-//         return res.redirect('https://' + req.get('host') + req.url);
-//     }
-//     next();
-// }
+function requireHTTPS(req, res, next) {
+    // The 'x-forwarded-proto' check is for Heroku
+    if (!req.secure && req.get('x-forwarded-proto') !== 'https' && process.env.NODE_ENV !== 'development') {
+        return res.redirect('https://' + req.get('host') + req.url);
+    }
+    next();
+}
 
-// app.use(requireHTTPS);
+app.use(requireHTTPS);
 
 app.use(
     session({
@@ -68,18 +68,7 @@ app.use('/getuser', (req, res) => {
 app.get('/health', (req, res) => {
     res.status(200).send('Ok');
 });
-app.get('/auth/google',
-    passport.authenticate('google', {
-        scope:
-            ['email', 'profile']
-    }
-    ));
 
-app.get('/auth/google/callback',
-    passport.authenticate('google', {
-        successRedirect: '/auth/google/success',
-        failureRedirect: '/auth/google/failure'
-    }));
 app.set('socketio', io);
 
 main().catch(err => console.log(err));
