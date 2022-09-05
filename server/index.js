@@ -7,11 +7,13 @@ const passport = require('passport');
 const mongoose = require('mongoose');
 const MongoStore = require('connect-mongo');
 const socketIo = require('socket.io');
-const server = require('http').createServer(app);
+const http = require('http');
 require('dotenv').config();
 require('./src/auth/passportAuth');
 
 const app = express();
+const server = http.createServer(app);
+
 app.enable('trust proxy');
 
 const io = socketIo(server, {
@@ -19,6 +21,7 @@ const io = socketIo(server, {
         origin: process.env.CLIENT_URL
     }
 }) //in case server and client run on different urls
+
 const corsPolicy = async (req, res, next) => {
     res.header('Access-Control-Allow-Credentials', true);
     res.header('Access-Control-Allow-Origin', req.headers.origin);
@@ -75,7 +78,7 @@ app.get('/health', (req, res) => {
 main().catch(err => console.log(err));
 
 async function main() {
-    
+
     app.set('socketio', io);
     //Whenever someone connects this gets executed
     io.on('connection', (socket) => {
