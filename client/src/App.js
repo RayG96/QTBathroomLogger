@@ -12,7 +12,7 @@ import NotAuthorized from 'pages/NotAuthorized';
 
 function App() {
     const { user } = useContext(AuthContext);
-    console.log(user);
+    
     return user === null ? null : user === 'NoUser' ? (
         <ChakraProvider>
             <SocketContext.Provider value={socket}>

@@ -32,7 +32,7 @@ function AuthProvider(props) {
     const [state, dispatch] = useReducer(authReducer, initialState);
 
     useEffect(() => {
-        console.log('getting user data');
+        // console.log('getting user data');
         fetch('/getuser')
             .then((res) => res.json())
             .then((data) => {

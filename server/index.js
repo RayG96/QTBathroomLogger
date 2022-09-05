@@ -14,7 +14,7 @@ require('./src/auth/passportAuth');
 const app = express();
 const server = http.createServer(app);
 
-app.enable('trust proxy');
+// app.enable('trust proxy');
 
 const io = socketIo(server, {
     cors: {
@@ -68,7 +68,6 @@ app.use(passport.session());
 app.use('/auth', require('./src/routes/auth'));
 app.use('/transactions', require('./src/routes/studentTransactions'));
 app.use('/getuser', (req, res) => {
-    console.log(req.user);
     res.send(req.user);
 });
 app.get('/health', (req, res) => {
@@ -82,12 +81,12 @@ async function main() {
     app.set('socketio', io);
     //Whenever someone connects this gets executed
     io.on('connection', (socket) => {
-        console.log('A user connected');
+        // console.log('A user connected');
         io.emit('currentDateTime', Date.now());
 
         //Whenever someone disconnects this piece of code executed
         socket.on('disconnect', () => {
-            console.log('A user disconnected');
+            // console.log('A user disconnected');
         });
     });
 
