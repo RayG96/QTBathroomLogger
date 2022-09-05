@@ -14,7 +14,7 @@ require('./src/auth/passportAuth');
 const app = express();
 const server = http.createServer(app);
 
-// app.enable('trust proxy');
+app.enable('trust proxy');
 
 const io = socketIo(server, {
     cors: {
