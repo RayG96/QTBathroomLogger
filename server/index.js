@@ -1,5 +1,3 @@
-require('dotenv').config()
-require('./src/auth/passportAuth');
 const express = require('express');
 const cors = require('cors');
 const path = require('path');
@@ -8,9 +6,13 @@ const cookieParser = require('cookie-parser');
 const passport = require('passport');
 const mongoose = require('mongoose');
 const MongoStore = require('connect-mongo');
+const socketIo = require('socket.io');
+const server = require('http').createServer(app);
+require('dotenv').config();
+require('./src/auth/passportAuth');
+
 const app = express();
-const socketIo = require('socket.io')
-const server = require('http').createServer(app)
+app.enable('trust proxy');
 
 const io = socketIo(server, {
     cors: {
@@ -59,6 +61,7 @@ app.use(cookieParser(process.env.SESSION_SECRET));
 app.use(passport.initialize());
 app.use(passport.session());
 
+//routes
 app.use('/auth', require('./src/routes/auth'));
 app.use('/transactions', require('./src/routes/studentTransactions'));
 app.use('/getuser', (req, res) => {
@@ -69,26 +72,26 @@ app.get('/health', (req, res) => {
     res.status(200).send('Ok');
 });
 
-app.set('socketio', io);
-
 main().catch(err => console.log(err));
 
-//Whenever someone connects this gets executed
-io.on('connection', (socket) => {
-    console.log('A user connected');
-    io.emit('currentDateTime', Date.now());
-
-    //Whenever someone disconnects this piece of code executed
-    socket.on('disconnect', () => {
-        console.log('A user disconnected');
-    });
-});
-
-setInterval(() => {
-    io.emit('currentDateTime', Date.now());
-}, 1000);
-
 async function main() {
+    
+    app.set('socketio', io);
+    //Whenever someone connects this gets executed
+    io.on('connection', (socket) => {
+        console.log('A user connected');
+        io.emit('currentDateTime', Date.now());
+
+        //Whenever someone disconnects this piece of code executed
+        socket.on('disconnect', () => {
+            console.log('A user disconnected');
+        });
+    });
+
+    setInterval(() => {
+        io.emit('currentDateTime', Date.now());
+    }, 1000);
+
     if (process.env.NODE_ENV === 'production') {
         app.use(express.static('../client/build'));
         app.get('*', (request, response) => {
@@ -113,5 +116,5 @@ async function main() {
         console.log(`Server running at http://localhost:${process.env.PORT}`);
     }).catch(err => {
         console.error(err)
-    })
+    });
 }
