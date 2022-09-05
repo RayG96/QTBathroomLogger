@@ -8,7 +8,7 @@ passport.use(
             clientID: process.env.OAUTH_CLIENT_ID,
             clientSecret: process.env.OAUTH_CLIENT_SECRET,
             callbackURL: process.env.CLIENT_URL + '/auth/google/callback',
-            passReqToCallback: true
+            proxy: true
         },
         async (accessToken, refreshToken, profile, done) => {
             if (!(profile._json.hd && profile._json.hd === 'robotigers1796.com')) {
