@@ -1,5 +1,3 @@
-@import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
-
 * {
     -webkit-tap-highlight-color: transparent;
 }
@@ -16,15 +14,15 @@
   
     /*========== Font and typography ==========*/
     --biggest-font-size: 3rem;
-    --small-font-size: 0.813rem;
+    --small-font-size: 0.875rem;
     --smaller-font-size: 0.75rem;
     --tiny-font-size: 0.625rem;
-  
+
     /*========== z index ==========*/
     --z-normal: 1;
     --z-tooltip: 10;
   }
 #root {
     min-height: 100vh;
-    background: #c4e1c7;
+    background: #dbebdc;
 }

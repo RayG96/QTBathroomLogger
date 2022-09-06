@@ -38,7 +38,7 @@
   position: absolute;
   width: 1.5rem;
   height: 1px;
-  background-color: var(--first-color);
+  background-color: var(--text-color);
 }
 
 .clock__twelve,
@@ -69,7 +69,7 @@
 .clock__rounder {
   width: 0.75rem;
   height: 0.75rem;
-  background-color: var(--first-color);
+  background-color: var(--text-color);
   border-radius: 50%;
   border: 2px solid var(--body-color);
   z-index: var(--z-tooltip);
@@ -92,7 +92,7 @@
   content: "";
   position: absolute;
   background-color: var(--text-color);
-  width: 0.25rem;
+  width: 0.4rem;
   height: 4.25rem;
   border-radius: 0.75rem;
   z-index: var(--z-normal);
@@ -121,7 +121,7 @@
 .clock__seconds::before {
   content: "";
   position: absolute;
-  background-color: var(--first-color);
+  background-color: var(--text-color);
   width: 0.125rem;
   height: 6.25rem;
   border-radius: 0.75rem;

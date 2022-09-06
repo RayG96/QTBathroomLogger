@@ -1,24 +1,30 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins&display=swap");
+
 .clock__text {
-    display: flex;
-    justify-content: center;
-  }
-  
-  .clock__text-hour,
-  .clock__text-minutes {
-    font-size: var(--biggest-font-size);
-    font-weight: var(--font-medium);
-    color: var(--title-color);
-  }
-  
-  .clock__text-ampm {
-    font-size: var(--tiny-font-size);
-    color: var(--title-color);
-    font-weight: var(--font-medium);
-    margin-left: var(--mb-0-25);
-  }
-  
-  .clock__date {
-    text-align: center;
-    font-size: var(--small-font-size);
-    font-weight: var(--font-medium);
-  }
+  font-family: "Poppins", sans-serif;
+  display: flex;
+  justify-content: center;
+}
+
+.clock__text-hour,
+.clock__text-minutes {
+  font-family: "Poppins", sans-serif;
+  font-size: var(--biggest-font-size);
+  font-weight: var(--font-medium);
+  color: var(--title-color);
+}
+
+.clock__text-ampm {
+  font-family: "Poppins", sans-serif;
+  font-size: var(--smaller-font-size);
+  color: var(--title-color);
+  font-weight: var(--font-medium);
+  margin-left: var(--mb-0-25);
+}
+
+.clock__date {
+  font-family: "Poppins", sans-serif;
+  text-align: center;
+  font-size: var(--medium-font-size);
+  font-weight: var(--font-medium);
+}
