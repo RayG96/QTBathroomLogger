@@ -43,8 +43,7 @@ function requireHTTPS(req, res, next) {
 
 (process.env.NODE_ENV === 'production') && app.use(requireHTTPS);
 
-app.use((req, res, done) => {
-    const isHealthCheck = req.url.indexOf('health') > -1;
+app.use(
     session({
         secret: process.env.SESSION_SECRET,
         resave: false,
@@ -57,8 +56,8 @@ app.use((req, res, done) => {
             secure: `${process.env.NODE_ENV === 'production' ? 'true' : 'auto'}`, // only https // auto when in development, true when in prod
             maxAge: 1000 * 60 * 60 * 24 * 14, // expiration time
         },
-    })(req, res, done);
-});
+    })
+);
 
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: false }));
