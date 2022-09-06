@@ -41,7 +41,7 @@ function requireHTTPS(req, res, next) {
     next();
 }
 
-app.use(requireHTTPS);
+(process.env.NODE_ENV === 'production') && app.use(requireHTTPS);
 
 app.use(
     session({
@@ -67,6 +67,7 @@ app.use(passport.session());
 //routes
 app.use('/auth', require('./src/routes/auth'));
 app.use('/transactions', require('./src/routes/studentTransactions'));
+app.use('/rosters', require('./src/routes/rosters'));
 app.use('/getuser', (req, res) => {
     res.send(req.user);
 });

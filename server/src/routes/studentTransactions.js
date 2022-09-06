@@ -1,6 +1,5 @@
 const express = require('express');
-const app = express();
-var bodyParser = require('body-parser');
+const bodyParser = require('body-parser');
 const router = express.Router();
 const bathroomLogModel = require('../models/BathroomLog');
 

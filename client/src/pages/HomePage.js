@@ -1,14 +1,16 @@
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { AuthContext } from 'context/auth';
 import { SocketContext } from 'context/socket';
-import { Box, Button, Center } from '@chakra-ui/react';
+import { Box, Button, Center, Divider, Heading } from '@chakra-ui/react';
 import { config } from 'util/constants';
 import Card from 'components/Card';
+import AnalogClock from 'components/Clock/AnalogClock';
+import DigitalClock from 'components/Clock/DigitalClock';
 
 export default function HomePage() {
     const { user } = useContext(AuthContext);
     const socket = useContext(SocketContext);
-    
+
     const [studentsOut, setStudentsOut] = useState([]);
     const [currentTime, setCurrentTime] = useState(null);
 
@@ -64,9 +66,20 @@ export default function HomePage() {
                     </a>
                 </Center>
             ) : (
-                <Box>
-                    {studentsOut.map((student, index) => <Card key={student._id} index={index} currentTime={currentTime} setCurrentTime={setCurrentTime} student={student} />)}
-                </Box>
+                studentsOut.length === 0 ? (
+                    <Box paddingTop={8} margin={'0 auto'}>
+                        <Center>
+                            <AnalogClock currentTime={currentTime} />
+                        </Center>
+                        <Center mt={6}>
+                            <DigitalClock currentTime={currentTime} />
+                        </Center>
+                    </Box>
+                ) : (
+                    < Box >
+                        {studentsOut.map((student, index) => <Card key={student._id} index={index} currentTime={currentTime} setCurrentTime={setCurrentTime} student={student} />)}
+                    </Box>
+                )
             )
             }
         </>
