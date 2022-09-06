@@ -48,7 +48,7 @@ app.use(
         secret: process.env.SESSION_SECRET,
         resave: false,
         saveUninitialized: false,
-        store: isHealthCheck || MongoStore.create({
+        store: MongoStore.create({
             mongoUrl: process.env.DATABASE_URL,
         }),
         cookie: {
