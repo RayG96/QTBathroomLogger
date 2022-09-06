@@ -11,10 +11,7 @@
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.3.0",
     "@testing-library/user-event": "^14.4.3",
-    "core-js": "^3.25.0",
     "framer-motion": "^6.5.1",
-    "globalthis": "^1.0.3",
-    "proxy-polyfill": "^0.3.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-icons": "^3.11.0",
@@ -37,8 +34,7 @@
     "production": [
       ">0.2%",
       "not dead",
-      "not op_mini all",
-      "ie 11"
+      "not op_mini all"
     ],
     "development": [
       "last 1 chrome version",
