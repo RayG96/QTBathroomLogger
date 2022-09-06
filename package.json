@@ -7,7 +7,7 @@
         "start": "cd server/ && npm run start",
         "preinstall": "cd server/ && npm install && cd ../client/ && npm install",
         "dev": "run-p dev-server dev-client",
-        "dev-server": "cd server && npm run start",
+        "dev-server": "cd server && npm run dev",
         "dev-client": "cd client && npm run start"
     },
     "dependencies": {},
