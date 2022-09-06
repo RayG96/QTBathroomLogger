@@ -43,12 +43,13 @@ function requireHTTPS(req, res, next) {
 
 (process.env.NODE_ENV === 'production') && app.use(requireHTTPS);
 
-app.use(
+app.use((req, res, done) => {
+    const isHealthCheck = req.url.indexOf('health') > -1;
     session({
         secret: process.env.SESSION_SECRET,
-        resave: true,
-        saveUninitialized: true,
-        store: MongoStore.create({
+        resave: false,
+        saveUninitialized: false,
+        store: isHealthCheck || MongoStore.create({
             mongoUrl: process.env.DATABASE_URL,
         }),
         cookie: {
@@ -56,7 +57,8 @@ app.use(
             secure: `${process.env.NODE_ENV === 'production' ? 'true' : 'auto'}`, // only https // auto when in development, true when in prod
             maxAge: 1000 * 60 * 60 * 24 * 14, // expiration time
         },
-    })
+    })(req, res, done);
+}
 );
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: false }));
