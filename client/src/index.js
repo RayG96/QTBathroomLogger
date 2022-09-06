@@ -1,4 +1,6 @@
-import { ColorModeScript } from '@chakra-ui/react';
+import 'react-app-polyfill/ie9';
+import 'react-app-polyfill/ie11';
+import 'react-app-polyfill/stable';
 import React, { StrictMode } from 'react';
 import * as ReactDOM from 'react-dom/client';
 import App from './App';
@@ -6,7 +8,6 @@ import reportWebVitals from './reportWebVitals';
 import * as serviceWorker from './serviceWorker';
 import './index.css';
 import { AuthProvider } from './context/auth';
-import babelPolyfill from 'babel-polyfill';
 
 const container = document.getElementById('root');
 const root = ReactDOM.createRoot(container);
