@@ -13,7 +13,6 @@ export default function RostersPage() {
     const [isError, setIsError] = useState(false);
 
     const TableRow = (props) => {
-
         const onClick = (e) => {
             e.preventDefault();
     

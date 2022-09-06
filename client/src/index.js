@@ -6,6 +6,7 @@ import reportWebVitals from './reportWebVitals';
 import * as serviceWorker from './serviceWorker';
 import './index.css';
 import { AuthProvider } from './context/auth';
+import babelPolyfill from 'babel-polyfill';
 
 const container = document.getElementById('root');
 const root = ReactDOM.createRoot(container);

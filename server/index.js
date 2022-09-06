@@ -58,8 +58,8 @@ app.use((req, res, done) => {
             maxAge: 1000 * 60 * 60 * 24 * 14, // expiration time
         },
     })(req, res, done);
-}
-);
+});
+
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser(process.env.SESSION_SECRET));

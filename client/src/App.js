@@ -8,7 +8,7 @@ import RostersPage from 'pages/RostersPage';
 import { AuthContext } from 'context/auth';
 import { SocketContext, socket } from 'context/socket';
 import FailedLoginPage from 'pages/FailedLoginPage';
-import NotAuthorized from 'pages/NotAuthorized';
+import NotAuthorizedPage from 'pages/NotAuthorizedPage';
 
 function App() {
     const { user } = useContext(AuthContext);
@@ -45,7 +45,7 @@ function App() {
                 <Router>
                     <Navbar />
                     <Routes>
-                        <Route path='/' element={<NotAuthorized />} />
+                        <Route path='/' element={<NotAuthorizedPage />} />
                         <Route path='*' element={<Navigate replace to='/' />} />
                     </Routes>
                 </Router>

@@ -69,8 +69,8 @@ export default function DigitalClock(props) {
             </div>
 
             <div className='clock__date'>
+                <span>{`${monthNow.current} `}</span>
                 <span>{`${dayNow.current} `}</span>
-                <span>{`${monthNow.current} , `}</span>
                 <span>{yearNow.current}</span>
             </div>
         </div>

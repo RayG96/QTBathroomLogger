@@ -79,7 +79,7 @@ export default function SignOutModal(props) {
         <>
             <Modal initialFocusRef={initialRef} finalFocusRef={finalRef} size="xl" isOpen={props.isOpen} onClose={onClose}>
                 <ModalOverlay />
-                <ModalContent mt={4}>
+                <ModalContent mt={8}>
                     <form onSubmit={onSubmit}>
                         <ModalHeader>Sign Out</ModalHeader>
                         <ModalCloseButton />
@@ -89,7 +89,7 @@ export default function SignOutModal(props) {
                                 <Input onChange={handleInputChange} value={name} ref={initialRef} autoComplete='off' placeholder='Name' />
                             </FormControl>
 
-                            <FormControl mt={2}>
+                            <FormControl mt={4}>
                                 <FormLabel>Reason</FormLabel>
                                 <ButtonGroup size={['sm', 'lg']} display='flex' justifyContent='center' variant='outline' spacing={['1', '4']}>
                                     <Button onClick={() => setReason('bathroom')} leftIcon={<FaToilet />} border='2px' colorScheme={reason === 'bathroom' ? 'orange' : 'gray'}>Bathroom</Button>
