@@ -8,8 +8,9 @@ router.use(bodyParser.urlencoded({
 }));
 
 router.get('/getCurrentlySignedOut/:teacherId', (req, res) => {
-    let teacherId = req.params.teacherId;
-    bathroomLogModel.find({ teacherGoogleId: teacherId, timeIn: null }, function (err, docs) {
+    const teacherId = req.params.teacherId;
+
+    bathroomLogModel.find({ teacherGoogleId: teacherId, timeIn: null }, (err, docs) => {
         if (err) {
             console.error(err);
             res.statusMessage = err;
@@ -22,12 +23,12 @@ router.get('/getCurrentlySignedOut/:teacherId', (req, res) => {
 });
 
 router.post('/sign-out', (req, res) => {
-    let teacherId = req.body.teacherId;
-    let studentName = req.body.name;
-    let signOutReason = req.body.reason;
+    const teacherId = req.body.teacherId;
+    const studentName = req.body.name;
+    const signOutReason = req.body.reason;
 
     // Create a bathroom log and insert into database
-    let model = new bathroomLogModel({
+    const model = new bathroomLogModel({
         teacherGoogleId: teacherId,
         studentName: studentName,
         signOutReason: signOutReason,
@@ -56,7 +57,8 @@ router.post('/sign-out', (req, res) => {
                         res.statusMessage = err;
                         res.status(500).end();
                     });
-            } else {
+            }
+            else {
                 res.statusMessage = 'Student already signed out';
                 res.status(400).end();
             }
@@ -65,8 +67,9 @@ router.post('/sign-out', (req, res) => {
 });
 
 router.post('/sign-in', (req, res) => {
-    let _id = req.body._id;
-    let currentTime = Date.now();
+    const _id = req.body._id;
+    const currentTime = Date.now();
+    
     bathroomLogModel.findOneAndUpdate({ _id: _id }, { timeIn: currentTime }, {
         new: true
     }).then(result => {
@@ -74,7 +77,8 @@ router.post('/sign-in', (req, res) => {
             let io = req.app.get('socketio');
             io.sockets.emit('studentTransaction', { action: 'delete', result: result });
             res.status(200).end();
-        } else {
+        }
+        else {
             res.statusMessage = 'Unable to sign in';
             res.status(400).end();
         }

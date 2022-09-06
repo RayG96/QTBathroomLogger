@@ -68,7 +68,6 @@ export default function SignOutModal(props) {
                 setErrorText('Error occurred');
                 setIsError(true);
             }
-            return response;
         }).catch(err => {
             console.error(err);
             setErrorText('Network error occurred');

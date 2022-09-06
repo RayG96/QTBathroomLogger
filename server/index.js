@@ -103,7 +103,7 @@ async function main() {
     } else {
         app.use(express.static('../client/public'));
         app.get('*', (req, res) => {
-            res.sendFile(path.join('../client/public', 'index.html'));
+            res.sendFile(path.join(__dirname, '../client/public', 'index.html'));
         });
         // app.get('/', (req, res) => {
         //     res.send('Hello World!');

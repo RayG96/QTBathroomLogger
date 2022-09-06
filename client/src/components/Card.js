@@ -32,11 +32,10 @@ export default function Card(props) {
                 _id: props.student._id
             })
         }).then(response => {
-            console.log(response);
+            // console.log(response);
             // if (response.status === 200) {
             //     props.onDelete(props.student._id);
             // }
-            return response;
         }).catch(err => {
             console.error(err);
         });
