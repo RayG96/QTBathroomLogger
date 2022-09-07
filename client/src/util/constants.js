@@ -1,5 +1,5 @@
 const prod = {
-    API_URL: 'https://qt-logger.onrender.com',
+    API_URL: 'https://qtlogger.onrender.com',
 };
 const dev = {
     API_URL: 'http://localhost:5000',
