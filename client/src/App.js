@@ -9,15 +9,18 @@ import { AuthContext } from 'context/auth';
 import { SocketContext, socket } from 'context/socket';
 import FailedLoginPage from 'pages/FailedLoginPage';
 import NotAuthorizedPage from 'pages/NotAuthorizedPage';
+import { StudentsProvider } from 'context/students';
 
 function App() {
     const { user } = useContext(AuthContext);
-    
+
     return user === null ? null : user === 'NoUser' ? (
         <ChakraProvider>
             <SocketContext.Provider value={socket}>
                 <Router>
-                    <Navbar />
+                    <StudentsProvider user={user}>
+                        <Navbar />
+                    </StudentsProvider>
                     <Routes>
                         <Route path='/' element={<HomePage />} />
                         <Route path='/failedLogin' element={<FailedLoginPage />} />
@@ -30,20 +33,24 @@ function App() {
         <ChakraProvider theme={theme}>
             <SocketContext.Provider value={socket}>
                 <Router>
-                    <Navbar />
-                    <Routes>
-                        <Route path='/' element={<HomePage />} />
-                        <Route path='/rosters' element={<RostersPage />} />
-                        <Route path='*' element={<NotFoundPage />} />
-                    </Routes>
+                    <StudentsProvider user={user}>
+                        <Navbar />
+                        <Routes>
+                            <Route path='/' element={<HomePage />} />
+                            <Route path='/rosters' element={<RostersPage />} />
+                            <Route path='*' element={<NotFoundPage />} />
+                        </Routes>
+                    </StudentsProvider>
                 </Router>
             </SocketContext.Provider>
         </ChakraProvider>
-    ) : ( 
+    ) : (
         <ChakraProvider>
             <SocketContext.Provider value={socket}>
                 <Router>
-                    <Navbar />
+                    <StudentsProvider user={user}>
+                        <Navbar />
+                    </StudentsProvider>
                     <Routes>
                         <Route path='/' element={<NotAuthorizedPage />} />
                         <Route path='*' element={<Navigate replace to='/' />} />

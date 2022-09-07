@@ -3,12 +3,14 @@ import { AiOutlineUpload } from 'react-icons/ai'
 import { config } from 'util/constants';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { AuthContext } from "context/auth";
+import { StudentsContext } from "context/students";
 
 export default function RostersPage() {
     const { user } = useContext(AuthContext);
+    const { rosters, getRosters } = useContext(StudentsContext);
+
     const hiddenImageInput = useRef(null);
 
-    const [rosters, setRosters] = useState([]);
     const [labelText, setLabelText] = useState('');
     const [isError, setIsError] = useState(false);
 
@@ -43,22 +45,6 @@ export default function RostersPage() {
                 </Tr>
             </>)
     }
-
-    const getRosters = () => {
-        fetch(`${config.API_URL}/rosters/getRosters/${user.googleId}`, {
-            method: 'GET',
-        }).then(response =>
-            response.json()
-        ).then(data => {
-            setRosters(data);
-        }).catch(err => {
-            console.error(err);
-        });
-    }
-
-    useEffect(() => {
-        getRosters();
-    }, []);
 
     const handleFileInput = (e) => {
         const file = e.target.files[0];

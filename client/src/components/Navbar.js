@@ -20,31 +20,35 @@ import logo from '../images/QT Logo 2021.png';
 import SignOutModal from './SignOutModal';
 import { Link } from 'react-router-dom';
 import { config } from 'util/constants';
+import { StudentsContext } from 'context/students';
 
 export default function Nav() {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { user } = useContext(AuthContext);
-    const students = useRef([]);
-
-    const getRosters = () => {
-        fetch(`${config.API_URL}/rosters/getRosters/${user.googleId}`, {
-            method: 'GET',
-        }).then(response =>
-            response.json()
-        ).then(data => {
-            data.forEach(e => {
-                e.students.forEach(student => {
-                    students.current.push(student['Student Name']);
-                })
-            })
-        }).catch(err => {
-            console.error(err);
-        });
-    }
-
+    const { students, getRosters } = useContext(StudentsContext);
+    
     useEffect(() => {
         getRosters();
     }, []);
+    // const getRosters = () => {
+    //     fetch(`${config.API_URL}/rosters/getRosters/${user.googleId}`, {
+    //         method: 'GET',
+    //     }).then(response =>
+    //         response.json()
+    //     ).then(data => {
+    //         data.forEach(e => {
+    //             e.students.forEach(student => {
+    //                 students.current.push(student['Student Name']);
+    //             })
+    //         })
+    //     }).catch(err => {
+    //         console.error(err);
+    //     });
+    // }
+
+    // useEffect(() => {
+    //     getRosters();
+    // }, []);
 
     return (
         <>
