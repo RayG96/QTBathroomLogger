@@ -12,7 +12,7 @@ import {
     ButtonGroup,
     FormErrorMessage,
 } from '@chakra-ui/react';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import { FaToilet, FaQuestion } from 'react-icons/fa';
 import { IoIosWater } from 'react-icons/io';
 import { MdLocalHospital } from 'react-icons/md';
@@ -23,7 +23,7 @@ export default function SignOutModal(props) {
     const initialRef = React.useRef(null);
     const finalRef = React.useRef(null);
 
-    const [name, setName] = useState('');
+    const name = useRef('');
     const [reason, setReason] = useState('bathroom');
 
     const [errorText, setErrorText] = useState('');
@@ -38,7 +38,7 @@ export default function SignOutModal(props) {
 
     const onClose = () => {
         props.onClose();
-        setName('');
+        name.current = '';
         setErrorText('');
         setIsError(false);
         setReason('bathroom')
@@ -53,7 +53,7 @@ export default function SignOutModal(props) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 teacherId: props.user.googleId,
-                name: name,
+                name: name.current,
                 reason: reason
             })
         }).then(response => {
@@ -84,7 +84,7 @@ export default function SignOutModal(props) {
                         <ModalBody pb={2}>
                             <FormControl isRequired>
                                 <FormLabel>Name</FormLabel>
-                                <AutoComplete suggestions={props.studentNames} initialRef={initialRef} placeholder='Name'></AutoComplete>
+                                <AutoComplete suggestions={props.studentNames} name={name} initialRef={initialRef} placeholder='Name'></AutoComplete>
                             </FormControl>
 
                             <FormControl mt={4}>

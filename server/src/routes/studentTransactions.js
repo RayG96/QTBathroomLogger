@@ -36,7 +36,8 @@ router.post('/sign-out', (req, res) => {
         timeOut: Date.now(),
         timeIn: null
     });
-
+    
+    // Regex to make student name filter case-insensitive
     bathroomLogModel.find({ teacherGoogleId: teacherId, studentName: { $regex: new RegExp(`^${studentName}$`), $options: 'i' }, timeIn: null }, function (err, docs) {
         if (err) {
             console.error(err);

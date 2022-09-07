@@ -20,6 +20,7 @@ export default function AutoComplete(props) {
         setActiveSuggestion(0);
         setShowSuggestions(true);
         setUserInput(e.currentTarget.value);
+        props.name.current = e.currentTarget.value;
     };
 
     const onClick = e => {
@@ -27,6 +28,7 @@ export default function AutoComplete(props) {
         setFilteredSuggestions([]);
         setShowSuggestions(false);
         setUserInput(e.currentTarget.innerText);
+        props.name.current = e.currentTarget.innerText;
     };
 
     const onKeyDown = e => {
@@ -34,6 +36,7 @@ export default function AutoComplete(props) {
             setActiveSuggestion(0);
             setShowSuggestions(false);
             setUserInput(filteredSuggestions[activeSuggestion]);
+            props.name.current = filteredSuggestions[activeSuggestion];
         } else if (e.keyCode === 38) {
             if (activeSuggestion === 0) {
                 return;
