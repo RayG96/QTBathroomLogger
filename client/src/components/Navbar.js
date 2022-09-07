@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useRef } from 'react';
+import { useLocation } from 'react-router-dom';
 import { AuthContext } from 'context/auth';
 import {
     Box,
@@ -26,6 +27,7 @@ export default function Nav() {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { user } = useContext(AuthContext);
     const { students, getRosters } = useContext(StudentsContext);
+    const location = useLocation();
     
     useEffect(() => {
         getRosters();
@@ -49,7 +51,6 @@ export default function Nav() {
     // useEffect(() => {
     //     getRosters();
     // }, []);
-
     return (
         <>
             <Box position={'sticky'} zIndex={999} top={0} w={'100%'} className='navbar' bg={useColorModeValue('#3e3e3e', 'gray.900')} px={4}>
@@ -68,7 +69,7 @@ export default function Nav() {
                             marginLeft={'15px'}
                         />
                     </Box>
-                    {(user !== 'NoUser' && user.admin === true) && <Button onClick={onOpen} colorScheme='orange' width='50%' size='lg'>Sign Out</Button>}
+                    {(user !== 'NoUser' && user.admin === true && location.pathname !== '/rosters') && <Button onClick={onOpen} colorScheme='orange' width='50%' size='lg'>Sign Out</Button>}
                     <SignOutModal studentNames={students.current} isOpen={isOpen} onClose={onClose} user={user} />
                     <Flex alignItems={'center'}>
                         <Stack direction={'row'} spacing={7}>
