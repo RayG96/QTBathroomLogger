@@ -57,6 +57,8 @@ router.post('/upload', upload.single('rosterFile'), (req, res) => {
             let name = e['Student Name'].toLowerCase().split(',');
             name = `${name[1]} ${name[0]}`.trim();
             name = name.toLowerCase().split(' ').map((s) => s.charAt(0).toUpperCase() + s.substring(1)).join(' ');
+            // Capitalize hyphenated names
+            name = name.replace(/\-[a-z]/g, match => match.toUpperCase());
             e['Student Name'] = name;
             if (e['Student ID']) e['Student ID'] = e['Student ID'].toString();
 
