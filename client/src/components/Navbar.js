@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useRef } from 'react';
 import { AuthContext } from 'context/auth';
 import {
     Box,
@@ -18,12 +18,33 @@ import {
 } from '@chakra-ui/react';
 import logo from '../images/QT Logo 2021.png';
 import SignOutModal from './SignOutModal';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { config } from 'util/constants';
 
 export default function Nav() {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { user } = useContext(AuthContext);
+    const students = useRef([]);
+
+    const getRosters = () => {
+        fetch(`${config.API_URL}/rosters/getRosters/${user.googleId}`, {
+            method: 'GET',
+        }).then(response =>
+            response.json()
+        ).then(data => {
+            data.forEach(e => {
+                e.students.forEach(student => {
+                    students.current.push(student['Student Name']);
+                })
+            })
+        }).catch(err => {
+            console.error(err);
+        });
+    }
+
+    useEffect(() => {
+        getRosters();
+    }, []);
 
     return (
         <>
@@ -44,7 +65,7 @@ export default function Nav() {
                         />
                     </Box>
                     {(user !== 'NoUser' && user.admin === true) && <Button onClick={onOpen} colorScheme='orange' width='50%' size='lg'>Sign Out</Button>}
-                    <SignOutModal isOpen={isOpen} onClose={onClose} user={user} />
+                    <SignOutModal studentNames={students.current} isOpen={isOpen} onClose={onClose} user={user} />
                     <Flex alignItems={'center'}>
                         <Stack direction={'row'} spacing={7}>
                             {user === 'NoUser' ? null : (

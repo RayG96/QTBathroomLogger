@@ -1,6 +1,5 @@
 import {
     Button,
-
     Modal,
     ModalOverlay,
     ModalContent,
@@ -10,16 +9,15 @@ import {
     ModalFooter,
     FormControl,
     FormLabel,
-    Input,
     ButtonGroup,
-    FormHelperText,
     FormErrorMessage,
 } from '@chakra-ui/react';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { FaToilet, FaQuestion } from 'react-icons/fa';
 import { IoIosWater } from 'react-icons/io';
 import { MdLocalHospital } from 'react-icons/md';
 import { config } from 'util/constants';
+import AutoComplete from './AutoComplete';
 
 export default function SignOutModal(props) {
     const initialRef = React.useRef(null);
@@ -31,12 +29,12 @@ export default function SignOutModal(props) {
     const [errorText, setErrorText] = useState('');
     const [isError, setIsError] = useState(false);
 
-    const handleInputChange = (e) => {
-        const regex = /^[a-zA-Z\s.,'`-]+$/; // only allow letters, comma, single quote, backtick, period, and hyphen
-        if (regex.test(e.target.value) || !e.target.value) {
-            setName(e.target.value);
-        }
-    }
+    // const handleInputChange = (e) => {
+    //     const regex = /^[a-zA-Z\s.,'`-]+$/; // only allow letters, comma, single quote, backtick, period, and hyphen
+    //     if (regex.test(e.target.value) || !e.target.value) {
+    //         setName(e.target.value);
+    //     }
+    // }
 
     const onClose = () => {
         props.onClose();
@@ -86,7 +84,7 @@ export default function SignOutModal(props) {
                         <ModalBody pb={2}>
                             <FormControl isRequired>
                                 <FormLabel>Name</FormLabel>
-                                <Input onChange={handleInputChange} value={name} ref={initialRef} autoComplete='off' placeholder='Name' />
+                                <AutoComplete suggestions={props.studentNames} initialRef={initialRef} placeholder='Name'></AutoComplete>
                             </FormControl>
 
                             <FormControl mt={4}>

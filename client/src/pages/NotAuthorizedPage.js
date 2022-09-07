@@ -1,6 +1,5 @@
 import { Box, Button, Image, VStack } from '@chakra-ui/react';
 import React from 'react';
-import { config } from 'util/constants';
 import shallNotPass from 'images/You_Shall_Not_Pass.jpg';
 
 export default function FailedLoginPage() {

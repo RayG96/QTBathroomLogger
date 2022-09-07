@@ -6,7 +6,19 @@ const rosterSchema = new Schema(
             type: String,
             required: true
         },
-        classId: {
+        schoolYear: {
+            type: String,
+            required: true
+        },
+        term: {
+            type: String,
+            required: true
+        },
+        markingPeriod: {
+            type: String,
+            required: true
+        },
+        rosterDate: {
             type: String,
             required: true
         },

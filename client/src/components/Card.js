@@ -1,6 +1,6 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import {
-    Box, Flex, Avatar, Stat, StatLabel, StatHelpText, Button, chakra
+    Box, Flex, Avatar, Stat, StatLabel, StatHelpText, Button
 } from "@chakra-ui/react";
 import { FaToilet, FaQuestion } from 'react-icons/fa';
 import { IoIosWater } from 'react-icons/io';

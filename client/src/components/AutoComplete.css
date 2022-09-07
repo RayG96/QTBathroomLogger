@@ -1,0 +1,38 @@
+  
+  .no-suggestions {
+    color: #999;
+    padding: 0.5rem;
+  }
+  
+  .suggestions {
+    border-radius: 6px;
+    z-index: 999;
+    position:absolute;
+    border: 1px solid #999;
+    border-top-width: 0;
+    border-radius: 6px;
+    list-style: none;
+    margin-top: 0;
+    max-height: 143px;
+    overflow-y: auto;
+    padding-left: 0;
+    width: 100%;
+  }
+  
+  .suggestions li {
+    background-color: #f3f3f3;
+    padding: 0.5rem;
+  }
+  
+  .suggestion-active,
+  .suggestions li:hover {
+    background-color: #c3e0c0;
+    border-radius: 6px;
+    color: #000000;
+    cursor: pointer;
+    font-weight: 700;
+  }
+  
+  .suggestions li:not(:last-of-type) {
+    border-bottom: 1px solid #999;
+  }

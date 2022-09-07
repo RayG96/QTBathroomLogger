@@ -1,7 +1,7 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { AuthContext } from 'context/auth';
 import { SocketContext } from 'context/socket';
-import { Box, Button, Center, Divider, Heading } from '@chakra-ui/react';
+import { Box, Button, Center } from '@chakra-ui/react';
 import { config } from 'util/constants';
 import Card from 'components/Card';
 import AnalogClock from 'components/Clock/AnalogClock';

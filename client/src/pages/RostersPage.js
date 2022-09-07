@@ -9,13 +9,13 @@ export default function RostersPage() {
     const hiddenImageInput = useRef(null);
 
     const [rosters, setRosters] = useState([]);
-    const [showLabel, setShowLabel] = useState(false);
+    const [labelText, setLabelText] = useState('');
     const [isError, setIsError] = useState(false);
 
     const TableRow = (props) => {
         const onClick = (e) => {
             e.preventDefault();
-    
+
             fetch(`${config.API_URL}/rosters/remove`, {
                 method: 'POST',
                 // We convert the React state to JSON and send it as the POST body
@@ -32,13 +32,14 @@ export default function RostersPage() {
                 console.error(err);
             });
         };
-    
         return (
             <>
                 <Tr>
-                    <Td>{props.roster.classId}</Td>
-                    <Td isNumeric>{props.roster.students.length}</Td>
-                    <Td isNumeric><Button onClick={onClick} colorScheme={'red'} size='sm'>Delete</Button></Td>
+                    <Th>{props.roster.rosterDate}</Th>
+                    <Th isNumeric>{props.roster.term}</Th>
+                    <Th isNumeric>{props.roster.markingPeriod}</Th>
+                    <Th isNumeric>{props.roster.students.length}</Th>
+                    <Td><Button onClick={onClick} colorScheme={'red'} size='sm'>Delete</Button></Td>
                 </Tr>
             </>)
     }
@@ -61,7 +62,8 @@ export default function RostersPage() {
 
     const handleFileInput = (e) => {
         const file = e.target.files[0];
-        if (file.size < 2048) {
+        console.log(file)
+        if (file.size < 200000) {
             const formData = new FormData();
             formData.append('teacherId', user.googleId);
             formData.append('rosterFile', file);
@@ -72,13 +74,22 @@ export default function RostersPage() {
             }).then(response => {
                 if (response.status === 200) {
                     getRosters();
+                    setIsError(false);
+                    setLabelText('Roster Uploaded');
+                } else {
+                    setIsError(true);
+                    setLabelText(response.statusText);
                 }
+                e.target.value = null;
             }).catch(err => {
+                e.target.value = null;
                 console.error(err);
                 setIsError(true);
             });
         } else {
-
+            e.target.value = null;
+            setIsError(true);
+            setLabelText('Roster file too large');
         }
     }
 
@@ -110,9 +121,11 @@ export default function RostersPage() {
                                 <Table variant='simple'>
                                     <Thead>
                                         <Tr>
-                                            <Th>Class</Th>
-                                            <Th isNumeric># of students</Th>
-                                            <Th isNumeric>Action</Th>
+                                            <Th>Date</Th>
+                                            <Th isNumeric>Term</Th>
+                                            <Th isNumeric>MP</Th>
+                                            <Th isNumeric># of Students</Th>
+                                            <Th>Delete</Th>
                                         </Tr>
                                     </Thead>
                                     <Tbody>
@@ -123,13 +136,13 @@ export default function RostersPage() {
                         </Box>
                         <Box mt={4}>
                             <Center>
-                                <Text fontSize='md' color={isError ? 'red' : 'brand.600'} hidden={!showLabel} >
-                                    Rosters
+                                <Text fontSize='md' p={2} color={isError ? 'red' : 'green'} hidden={!labelText} >
+                                    {labelText}
                                 </Text>
                             </Center>
                             <Center>
                                 <Flex alignItems='center'>
-                                    <input type='file' accept='.csv' style={{ display: 'none' }} onChange={handleFileInput} ref={hiddenImageInput} />
+                                    <input type='file' accept='.xlsx' style={{ display: 'none' }} onChange={handleFileInput} ref={hiddenImageInput} />
                                     <Button rightIcon={<AiOutlineUpload />} colorScheme={'teal'} onClick={() => hiddenImageInput.current.click()} >Upload Roster</Button>
                                 </Flex>
                             </Center>
