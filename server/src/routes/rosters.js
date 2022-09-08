@@ -11,8 +11,8 @@ router.get('/getRosters/:teacherId', (req, res) => {
     rosterModel.find({ teacherGoogleId: teacherId }, (err, docs) => {
         if (err) {
             console.error(err);
-            res.statusMessage = err;
-            res.status(500).end();
+            // res.statusMessage = err;
+            res.status(500).send(err);
         }
         else {
             res.status(200).send(docs);
@@ -86,13 +86,13 @@ router.post('/upload', upload.single('rosterFile'), (req, res) => {
             })
             .catch(err => {
                 console.error(err);
-                res.statusMessage = err;
-                res.status(500).end();
+                // res.statusMessage = err;
+                res.status(500).send(err);
             });
     } else {
         // Roster Validation Failed
-        res.statusMessage = 'Malformed Roster Selected';
-        res.status(400).end();
+        // res.statusMessage = 'Malformed Roster Selected';
+        res.status(400).send('Malformed Roster Selected');
     }
 
 });
@@ -103,8 +103,8 @@ router.post('/remove', (req, res) => {
     rosterModel.findByIdAndDelete(_id, (err) => {
         if (err) {
             console.error(err);
-            res.statusMessage = err;
-            res.status(500).end();
+            // res.statusMessage = err;
+            res.status(500).send(err);
         }
         else {
             res.status(200).end();

@@ -60,14 +60,16 @@ export default function SignOutModal(props) {
             if (response.status === 200) {
                 onClose();
             } else if (response.status === 400) {
-                setErrorText(response.statusText);
                 setIsError(true);
             } else {
                 setErrorText('Error occurred');
                 setIsError(true);
             }
-        }).catch(err => {
-            console.error(err);
+            return response.text();
+        }).then(function(data) {
+            if(data) setErrorText(data);
+          })
+          .catch(err => {
             setErrorText('Network error occurred');
             setIsError(true);
         });

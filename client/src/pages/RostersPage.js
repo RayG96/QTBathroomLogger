@@ -64,9 +64,11 @@ export default function RostersPage() {
                     setLabelText('Roster Uploaded');
                 } else {
                     setIsError(true);
-                    setLabelText(response.statusText);
                 }
                 e.target.value = null;
+                return response.text();
+            }).then(data => {
+                if (data) setLabelText(data);
             }).catch(err => {
                 e.target.value = null;
                 console.error(err);

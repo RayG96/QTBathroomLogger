@@ -13,8 +13,8 @@ router.get('/getCurrentlySignedOut/:teacherId', (req, res) => {
     bathroomLogModel.find({ teacherGoogleId: teacherId, timeIn: null }, (err, docs) => {
         if (err) {
             console.error(err);
-            res.statusMessage = err;
-            res.status(500).end();
+            // res.statusMessage = err;
+            res.status(500).send(err);
         }
         else {
             res.status(200).send(docs);
@@ -41,8 +41,8 @@ router.post('/sign-out', (req, res) => {
     bathroomLogModel.find({ teacherGoogleId: teacherId, studentName: { $regex: new RegExp(`^${studentName}$`), $options: 'i' }, timeIn: null }, function (err, docs) {
         if (err) {
             console.error(err);
-            res.statusMessage = err;
-            res.status(500).end();
+            // res.statusMessage = err;
+            res.status(500).send(err);
         }
         else {
             if (docs.length === 0) {
@@ -55,13 +55,13 @@ router.post('/sign-out', (req, res) => {
                     })
                     .catch(err => {
                         console.error(err);
-                        res.statusMessage = err;
-                        res.status(500).end();
+                        // res.statusMessage = err;
+                        res.status(500).send(err);
                     });
             }
             else {
-                res.statusMessage = 'Student already signed out';
-                res.status(400).end();
+                // res.statusMessage = 'Student already signed out';
+                res.status(400).send('Student already signed out');
             }
         }
     });
@@ -80,13 +80,13 @@ router.post('/sign-in', (req, res) => {
             res.status(200).end();
         }
         else {
-            res.statusMessage = 'Unable to sign in';
-            res.status(400).end();
+            // res.statusMessage = 'Unable to sign in';
+            res.status(400).send('Unable to sign in');
         }
     }).catch(err => {
         console.error(err);
-        res.statusMessage = err;
-        res.status(500).end();
+        // res.statusMessage = err;
+        res.status(500).send(err);
     });
 });
 

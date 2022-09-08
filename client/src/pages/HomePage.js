@@ -14,7 +14,7 @@ export default function HomePage() {
     const [studentsOut, setStudentsOut] = useState([]);
     const [currentTime, setCurrentTime] = useState(null);
 
-    useEffect(() => {
+    const getCurrentlySignedOut = () => {
         fetch(`${config.API_URL}/transactions/getCurrentlySignedOut/${user.googleId}`, {
             method: 'GET',
         }).then(response =>
@@ -24,10 +24,13 @@ export default function HomePage() {
         }).catch(err => {
             console.error(err);
         });
+    }
 
+    useEffect(() => {
+        getCurrentlySignedOut();
         // client-side
         socket.on('connect', () => {
-            // console.log(socket.id);
+            getCurrentlySignedOut();
         });
         socket.on('currentDateTime', (body) => {
             setCurrentTime(body);
@@ -66,22 +69,16 @@ export default function HomePage() {
                     </a>
                 </Center>
             ) : (
-                studentsOut.length === 0 ? (
-                    <Box paddingTop={8} margin={'0 auto'}>
-                        <Center>
-                            <AnalogClock currentTime={currentTime} />
-                        </Center>
-                        <Center mt={6}>
-                            <DigitalClock currentTime={currentTime} />
-                        </Center>
-                    </Box>
-                ) : (
-                    < Box >
-                        {studentsOut.map((student, index) => <Card key={student._id} index={index} currentTime={currentTime} setCurrentTime={setCurrentTime} student={student} />)}
-                    </Box>
-                )
-            )
-            }
+                < Box >
+                    <Center mt={10} hidden={studentsOut.length > 0}>
+                        <AnalogClock currentTime={currentTime} />
+                    </Center>
+                    <Center mt={6} hidden={studentsOut.length > 0}>
+                        <DigitalClock currentTime={currentTime} />
+                    </Center>
+                    {studentsOut.map((student, index) => <Card key={student._id} index={index} currentTime={currentTime} setCurrentTime={setCurrentTime} student={student} />)}
+                </Box>
+            )}
         </>
     );
 }
