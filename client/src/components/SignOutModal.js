@@ -91,9 +91,9 @@ export default function SignOutModal(props) {
                                 <FormLabel>Reason</FormLabel>
                                 <ButtonGroup size={['sm', 'lg']} display='flex' justifyContent='center' variant='outline' spacing={['1', '4']}>
                                     <Button onClick={() => setReason('bathroom')} leftIcon={<FaToilet />} border='2px' colorScheme={reason === 'bathroom' ? 'orange' : 'gray'}>Bathroom</Button>
-                                    <Button onClick={() => setReason('water')} leftIcon={<IoIosWater />} border='2px' colorScheme={reason === 'water' ? 'orange' : 'gray'}>Water</Button>
-                                    <Button onClick={() => setReason('nurse')} leftIcon={<MdLocalHospital />} border='2px' colorScheme={reason === 'nurse' ? 'orange' : 'gray'}>Nurse</Button>
-                                    <Button onClick={() => setReason('other')} leftIcon={<FaQuestion />} border='2px' colorScheme={reason === 'other' ? 'orange' : 'gray'}>Other</Button>
+                                    <Button onClick={() => setReason('water')} leftIcon={<IoIosWater />} border='2px' colorScheme={reason === 'water' ? 'blue' : 'gray'}>Water</Button>
+                                    <Button onClick={() => setReason('nurse')} leftIcon={<MdLocalHospital />} border='2px' colorScheme={reason === 'red' ? 'orange' : 'gray'}>Nurse</Button>
+                                    <Button onClick={() => setReason('other')} leftIcon={<FaQuestion />} border='2px' colorScheme={reason === 'other' ? 'purple' : 'gray'}>Other</Button>
                                 </ButtonGroup>
                             </FormControl>
                         </ModalBody>
