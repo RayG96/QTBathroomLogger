@@ -12,7 +12,7 @@ export default function HomePage() {
     const socket = useContext(SocketContext);
 
     const [studentsOut, setStudentsOut] = useState([]);
-    const [currentTime, setCurrentTime] = useState(null);
+    const [currentTime, setCurrentTime] = useState(Date.now());
 
     const getCurrentlySignedOut = () => {
         fetch(`${config.API_URL}/transactions/getCurrentlySignedOut/${user.googleId}`, {
