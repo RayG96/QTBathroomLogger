@@ -69,9 +69,12 @@ router.post('/sign-out', (req, res) => {
 
 router.post('/sign-in', (req, res) => {
     const _id = req.body._id;
+    const timeOut = new Date(req.body.timeOut);
     const currentTime = Date.now();
     
-    bathroomLogModel.findOneAndUpdate({ _id: _id }, { timeIn: currentTime }, {
+    const totalTimeOut = (currentTime - timeOut) / 1000;
+
+    bathroomLogModel.findOneAndUpdate({ _id: _id }, { timeIn: currentTime, totalTimeOut: totalTimeOut }, {
         new: true
     }).then(result => {
         if (result.timeIn !== null) {

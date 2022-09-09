@@ -8,14 +8,14 @@ import { MdLocalHospital } from 'react-icons/md';
 import { config } from 'util/constants';
 
 export default function Card(props) {
-    const timeIn = useRef(new Date(props.student.timeOut).getTime());
+    const timeOut = useRef(new Date(props.student.timeOut).getTime());
     const timeDifferenceTotalSeconds = useRef(0);
     const timeDifferenceMinutes = useRef(0);
     const timeDifferenceSeconds = useRef(0);
 
     useEffect(() => {
         if (props.currentTime !== null) {
-            timeDifferenceTotalSeconds.current = (props.currentTime - timeIn.current) / 1000;
+            timeDifferenceTotalSeconds.current = (props.currentTime - timeOut.current) / 1000;
             timeDifferenceMinutes.current = Math.floor(timeDifferenceTotalSeconds.current / 60);
             timeDifferenceSeconds.current = Math.floor(timeDifferenceTotalSeconds.current - timeDifferenceMinutes.current * 60);
         }
@@ -29,7 +29,8 @@ export default function Card(props) {
             // We convert the React state to JSON and send it as the POST body
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                _id: props.student._id
+                _id: props.student._id,
+                timeOut: props.student.timeOut
             })
         }).then(response => {
             // console.log(response);
