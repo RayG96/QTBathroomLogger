@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const router = express.Router();
 const bathroomLogModel = require('../models/BathroomLog');
+const lateLogModel = require('../models/LateLog');
 
 router.use(bodyParser.urlencoded({
     extended: true
@@ -21,6 +22,47 @@ router.get('/getCurrentlySignedOut/:teacherId', (req, res) => {
         }
     });
 });
+
+router.get('/getLateLogs/:teacherId', (req, res) => {
+    const teacherId = req.params.teacherId;
+
+    lateLogModel.find({ teacherGoogleId: teacherId }, (err, docs) => {
+        if (err) {
+            console.error(err);
+            res.status(500).send(err);
+        }
+        else {
+            res.status(200).send(docs);
+        }
+    });
+});
+
+router.post('/late-log', (req, res) => {
+    const teacherId = req.body.teacherId;
+    const studentName = req.body.name;
+
+    // Create a bathroom log and insert into database
+    const model = new lateLogModel({
+        teacherGoogleId: teacherId,
+        studentName: studentName,
+        date: Date.now(),
+        timeIn: Date.now()
+    });
+
+    model.save()
+    .then((result) => {
+        let io = req.app.get('socketio');
+        io.emit('currentDateTime', Date.now());
+        res.status(200).end();
+    })
+    .catch(err => {
+        console.error(err);
+        // res.statusMessage = err;
+        res.status(500).send(err);
+    });
+
+});
+
 
 router.post('/sign-out', (req, res) => {
     const teacherId = req.body.teacherId;

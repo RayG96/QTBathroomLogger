@@ -7,6 +7,7 @@ const StudentsContext = createContext();
 function StudentsProvider(props) {
     const students = useRef([]);
     const [rosters, setRosters] = useState([]);
+    const [latelogs, setLateLogs] = useState([]);
 
     const getRosters = () => {
         fetch(`${config.API_URL}/rosters/getRosters/${props.user.googleId}`, {
@@ -26,11 +27,24 @@ function StudentsProvider(props) {
         });
     }
 
+    const getLateLogs = () => {
+        fetch(`${config.API_URL}/transactions/getLateLogs/${props.user.googleId}`, {
+            method: 'GET',
+        }).then(response =>
+            response.json()
+        ).then(data => {
+            setLateLogs(data);
+        }).catch(err => {
+            console.error(err);
+        });
+    }
+
     useEffect(() => {
         getRosters();
+        getLateLogs();
     }, []);
 
-    return <StudentsContext.Provider value={{students, rosters, getRosters}} {...props} /> ;
+    return <StudentsContext.Provider value={{students, rosters, latelogs, getRosters, getLateLogs }} {...props} /> ;
 
 }
 

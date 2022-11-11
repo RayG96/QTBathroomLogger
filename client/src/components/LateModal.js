@@ -9,22 +9,17 @@ import {
     ModalFooter,
     FormControl,
     FormLabel,
-    ButtonGroup,
     FormErrorMessage,
 } from '@chakra-ui/react';
 import React, { useRef, useState } from 'react';
-import { FaToilet, FaQuestion } from 'react-icons/fa';
-import { IoIosWater } from 'react-icons/io';
-import { MdLocalHospital } from 'react-icons/md';
 import { config } from 'util/constants';
 import AutoComplete from './AutoComplete';
 
-export default function SignOutModal(props) {
+export default function LateModal(props) {
     const initialRef = React.useRef(null);
     const finalRef = React.useRef(null);
 
     const name = useRef('');
-    const [reason, setReason] = useState('bathroom');
 
     const [errorText, setErrorText] = useState('');
     const [isError, setIsError] = useState(false);
@@ -35,26 +30,24 @@ export default function SignOutModal(props) {
     //         setName(e.target.value);
     //     }
     // }
-    
+
     const onClose = () => {
         props.onClose();
         name.current = '';
         setErrorText('');
         setIsError(false);
-        setReason('bathroom')
     }
 
     const onSubmit = (e) => {
         e.preventDefault();
 
-        fetch(`${config.API_URL}/transactions/sign-out`, {
+        fetch(`${config.API_URL}/transactions/late-log`, {
             method: 'POST',
             // We convert the React state to JSON and send it as the POST body
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 teacherId: props.user.googleId,
-                name: name.current,
-                reason: reason
+                name: name.current
             })
         }).then(response => {
             if (response.status === 200) {
@@ -81,22 +74,12 @@ export default function SignOutModal(props) {
                 <ModalOverlay />
                 <ModalContent mt={8}>
                     <form onSubmit={onSubmit}>
-                        <ModalHeader>Sign Out</ModalHeader>
+                        <ModalHeader>Late Log</ModalHeader>
                         <ModalCloseButton />
                         <ModalBody pb={2}>
                             <FormControl isRequired>
                                 <FormLabel>Name</FormLabel>
                                 <AutoComplete suggestions={props.studentNames} name={name} initialRef={initialRef} placeholder='Name'></AutoComplete>
-                            </FormControl>
-
-                            <FormControl mt={4}>
-                                <FormLabel>Reason</FormLabel>
-                                <ButtonGroup size={['sm', 'lg']} display='flex' justifyContent='center' variant='outline' spacing={['1', '4']}>
-                                    <Button onClick={() => setReason('bathroom')} leftIcon={<FaToilet />} border='2px' colorScheme={reason === 'bathroom' ? 'orange' : 'gray'}>Bathroom</Button>
-                                    <Button onClick={() => setReason('water')} leftIcon={<IoIosWater />} border='2px' colorScheme={reason === 'water' ? 'blue' : 'gray'}>Water</Button>
-                                    <Button onClick={() => setReason('nurse')} leftIcon={<MdLocalHospital />} border='2px' colorScheme={reason === 'nurse' ? 'red' : 'gray'}>Nurse</Button>
-                                    <Button onClick={() => setReason('other')} leftIcon={<FaQuestion />} border='2px' colorScheme={reason === 'other' ? 'purple' : 'gray'}>Other</Button>
-                                </ButtonGroup>
                             </FormControl>
                         </ModalBody>
 
@@ -105,7 +88,7 @@ export default function SignOutModal(props) {
                                 <FormErrorMessage>{errorText}</FormErrorMessage>
                             </FormControl>
                             <Button type='submit' width='25%' colorScheme='blue' mr={3}>
-                                Sign Out
+                                Log
                             </Button>
                         </ModalFooter>
                     </form>

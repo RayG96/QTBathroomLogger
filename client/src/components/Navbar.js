@@ -19,19 +19,27 @@ import {
 } from '@chakra-ui/react';
 import logo from '../images/QT Logo 2021.png';
 import SignOutModal from './SignOutModal';
+import LateModal from './LateModal';
 import { Link } from 'react-router-dom';
 import { config } from 'util/constants';
 import { StudentsContext } from 'context/students';
 
 export default function Nav() {
-    const { isOpen, onOpen, onClose } = useDisclosure();
+    const { isOpen, onOpen, onClose} = useDisclosure();
+    const { 
+        isOpen: isOpenLateModal, 
+        onOpen: onOpenLateModal, 
+        onClose: onCloseLateModal 
+    } = useDisclosure();
+
     const { user } = useContext(AuthContext);
     const { students, getRosters } = useContext(StudentsContext);
     const location = useLocation();
-    
+
     useEffect(() => {
         getRosters();
     }, []);
+
     // const getRosters = () => {
     //     fetch(`${config.API_URL}/rosters/getRosters/${user.googleId}`, {
     //         method: 'GET',
@@ -69,8 +77,14 @@ export default function Nav() {
                             marginLeft={'15px'}
                         />
                     </Box>
-                    {(user !== 'NoUser' && user.admin === true && location.pathname !== '/rosters') && <Button onClick={onOpen} colorScheme='orange' width='50%' size='lg'>Sign Out</Button>}
+                    {(user !== 'NoUser' && user.admin === true && location.pathname === '/') && 
+                    <>
+                        <Button onClick={onOpen} colorScheme='orange' width='25%' size='lg'>Sign Out</Button>
+                        <Button onClick={onOpenLateModal} colorScheme='red' width='25%' size='lg'>Late</Button>
+                    </>
+                    }
                     <SignOutModal studentNames={students.current} isOpen={isOpen} onClose={onClose} user={user} />
+                    <LateModal studentNames={students.current} isOpen={isOpenLateModal} onClose={onCloseLateModal} user={user} />
                     <Flex alignItems={'center'}>
                         <Stack direction={'row'} spacing={7}>
                             {user === 'NoUser' ? null : (
@@ -103,6 +117,7 @@ export default function Nav() {
                                         <MenuDivider />
                                         <MenuItem as={Link} to={'/'}>Home</MenuItem>
                                         {user.admin === true && <MenuItem as={Link} to={'/rosters'}>Rosters</MenuItem>}
+                                        {user.admin === true && <MenuItem as={Link} to={'/latelogs'}>Late Logs</MenuItem>}
                                         <a href={`${config.API_URL}/auth/logout`}><MenuItem>Logout</MenuItem></a>
                                     </MenuList>
                                 </Menu>

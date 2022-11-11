@@ -5,6 +5,7 @@ import Navbar from './components/Navbar';
 import NotFoundPage from 'pages/NotFoundPage';
 import HomePage from 'pages/HomePage';
 import RostersPage from 'pages/RostersPage';
+import LateLogPage from 'pages/LateLogPage';
 import { AuthContext } from 'context/auth';
 import { SocketContext, socket } from 'context/socket';
 import FailedLoginPage from 'pages/FailedLoginPage';
@@ -38,6 +39,7 @@ function App() {
                         <Routes>
                             <Route path='/' element={<HomePage />} />
                             <Route path='/rosters' element={<RostersPage />} />
+                            <Route path='/latelogs' element={<LateLogPage />} />
                             <Route path='*' element={<NotFoundPage />} />
                         </Routes>
                     </StudentsProvider>
