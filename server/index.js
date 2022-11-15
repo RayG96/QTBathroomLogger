@@ -54,7 +54,7 @@ app.use(
         cookie: {
             sameSite: `${process.env.NODE_ENV === 'production' ? 'none' : 'lax'}`, // cross site // set lax while working with http:localhost, but none when in prod
             secure: `${process.env.NODE_ENV === 'production' ? 'true' : 'auto'}`, // only https // auto when in development, true when in prod
-            maxAge: 1000 * 60 * 60 * 24 * 14, // expiration time
+            maxAge: 1000 * 60 * 60 * 24 * 120, // expiration time // 120 days
         },
     })
 );
