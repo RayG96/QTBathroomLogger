@@ -1,7 +1,6 @@
 import { Box, Flex, chakra, Center, Divider, Text, Table, Thead, Tbody, Tr, Th, Td, TableContainer } from "@chakra-ui/react";
 import React, { useContext, useEffect} from 'react';
 import { StudentsContext } from "context/students";
-import { m } from "framer-motion";
 
 export default function LateLogPage() {
     const { latelogs, getLateLogs } = useContext(StudentsContext);

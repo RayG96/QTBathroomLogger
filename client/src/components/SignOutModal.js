@@ -12,18 +12,20 @@ import {
     ButtonGroup,
     FormErrorMessage,
 } from '@chakra-ui/react';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { FaToilet, FaQuestion } from 'react-icons/fa';
 import { IoIosWater } from 'react-icons/io';
 import { MdLocalHospital } from 'react-icons/md';
 import { config } from 'util/constants';
-import AutoComplete from './AutoComplete';
+// @ts-ignore
+import { ReactSearchAutocomplete } from 'react-search-autocomplete'
 
 export default function SignOutModal(props) {
-    const initialRef = React.useRef(null);
     const finalRef = React.useRef(null);
 
     const name = useRef('');
+    const items = useRef([]);
+    
     const [reason, setReason] = useState('bathroom');
 
     const [errorText, setErrorText] = useState('');
@@ -74,10 +76,22 @@ export default function SignOutModal(props) {
             setIsError(true);
         });
     };
+    
+    const handleOnSearch = (string) => {
+        name.current = string;
+    }
+
+    const handleOnSelect = (item) => {
+        name.current = item.name;
+    }
+
+    useEffect(() => {
+        items.current = props.studentNames.map((str, index) => ({id: index + 1, name: str}));
+    }, [props.studentNames]);
 
     return (
         <>
-            <Modal initialFocusRef={initialRef} finalFocusRef={finalRef} size="xl" isOpen={props.isOpen} onClose={onClose}>
+            <Modal finalFocusRef={finalRef} size="xl" isOpen={props.isOpen} onClose={onClose}>
                 <ModalOverlay />
                 <ModalContent mt={8}>
                     <form onSubmit={onSubmit}>
@@ -86,7 +100,17 @@ export default function SignOutModal(props) {
                         <ModalBody pb={2}>
                             <FormControl isRequired>
                                 <FormLabel>Name</FormLabel>
-                                <AutoComplete suggestions={props.studentNames} name={name} initialRef={initialRef} placeholder='Name'></AutoComplete>
+                                <ReactSearchAutocomplete
+                                    items={items.current}
+                                    onSearch={handleOnSearch}
+                                    onSelect={handleOnSelect}
+                                    showIcon={false}
+                                    maxResults={5}
+                                    fuseOptions={{threshold: 0.1}}
+                                    styling={{borderRadius: '12px', zIndex: '1', fontFamily: 'Segoe UI'}}
+                                    autoFocus
+                                    placeholder='Name'
+                                />
                             </FormControl>
 
                             <FormControl mt={4}>

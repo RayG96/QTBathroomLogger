@@ -11,25 +11,19 @@ import {
     FormLabel,
     FormErrorMessage,
 } from '@chakra-ui/react';
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { config } from 'util/constants';
-import AutoComplete from './AutoComplete';
+// @ts-ignore
+import { ReactSearchAutocomplete } from 'react-search-autocomplete'
 
 export default function LateModal(props) {
-    const initialRef = React.useRef(null);
     const finalRef = React.useRef(null);
 
     const name = useRef('');
+    const items = useRef([]);
 
     const [errorText, setErrorText] = useState('');
     const [isError, setIsError] = useState(false);
-
-    // const handleInputChange = (e) => {
-    //     const regex = /^[a-zA-Z\s.,'`-]+$/; // only allow letters, comma, single quote, backtick, period, and hyphen
-    //     if (regex.test(e.target.value) || !e.target.value) {
-    //         setName(e.target.value);
-    //     }
-    // }
 
     const onClose = () => {
         props.onClose();
@@ -67,10 +61,22 @@ export default function LateModal(props) {
             setIsError(true);
         });
     };
+    
+    const handleOnSearch = (string) => {
+        name.current = string;
+    }
+
+    const handleOnSelect = (item) => {
+        name.current = item.name;
+    }
+
+    useEffect(() => {
+        items.current = props.studentNames.map((str, index) => ({id: index + 1, name: str}));
+    }, [props.studentNames]);
 
     return (
         <>
-            <Modal initialFocusRef={initialRef} finalFocusRef={finalRef} size="xl" isOpen={props.isOpen} onClose={onClose}>
+            <Modal finalFocusRef={finalRef} size="xl" isOpen={props.isOpen} onClose={onClose}>
                 <ModalOverlay />
                 <ModalContent mt={8}>
                     <form onSubmit={onSubmit}>
@@ -79,11 +85,21 @@ export default function LateModal(props) {
                         <ModalBody pb={2}>
                             <FormControl isRequired>
                                 <FormLabel>Name</FormLabel>
-                                <AutoComplete suggestions={props.studentNames} name={name} initialRef={initialRef} placeholder='Name'></AutoComplete>
+                                <ReactSearchAutocomplete
+                                    items={items.current}
+                                    onSearch={handleOnSearch}
+                                    onSelect={handleOnSelect}
+                                    showIcon={false}
+                                    maxResults={5}
+                                    fuseOptions={{threshold: 0.1}}
+                                    styling={{borderRadius: '12px', zIndex: '1', fontFamily: 'Segoe UI'}}
+                                    autoFocus
+                                    placeholder='Name'
+                                />
                             </FormControl>
                         </ModalBody>
 
-                        <ModalFooter>
+                        <ModalFooter marginTop={'2em'}>
                             <FormControl isInvalid={isError}>
                                 <FormErrorMessage>{errorText}</FormErrorMessage>
                             </FormControl>
